@@ -1,0 +1,74 @@
+{
+  "repository": "https://github.com/riscv-boom/riscv-boom",
+  "revision": "58ef2720eae13be26b3008c02b5a74ce29c61c44",
+  "files": {
+    "src/main/scala/v3/exu/rename/rename-freelist.scala": "25bae4cc9a8f3df48eed495e676739ab4642c6c2e84977373e7f07301e1dfbe4",
+    "src/main/scala/v3/exu/rename/rename-maptable.scala": "b343ca61ace6fbb741c18fac5e1f20bbe884bc69885ccb31c597b7b127eadff6",
+    "src/main/scala/v3/exu/rename/rename-busytable.scala": "4c3216dd59ba7ddc6668c9f4ec72525bef19536a327f72673ba7f94eb816fcd9",
+    "src/main/scala/v3/exu/issue-units/issue-slot.scala": "1b47138d9f95e684ecfd8b711bc12fe480b487bb53f6ec11c3e29163b7d4c3eb",
+    "src/main/scala/v3/exu/rob.scala": "802e462ae66adfb5b59397a632e6014642630c38804e73659115b35e10a3c68e",
+    "src/main/scala/v3/lsu/lsu.scala": "6e30705faa8e83cab19646a64fba58535cee6fc85fbd6d018435fe82ace153b2",
+    "src/main/scala/v3/common/config-mixins.scala": "623801149b7164d6e6fc7f72b0709a660afeed02e4a6147d3fa69bc8d75eb3b1",
+    "src/main/scala/v3/lsu/tlb.scala": "f7c5fdcfda1c78d1070f6a3567ee07c9a6aefa96929b7803cefb3873095b0881",
+    "src/main/scala/v3/lsu/dcache.scala": "138334af570cf8b1e15bfa147c17aa5987f2f7b7117c7bc72282aa6ccdee5e7e",
+    "src/main/scala/v3/ifu/frontend.scala": "94b9e22e56c85934c9b166a7e0fc833c59f9ab5765c71fc9e3f50f0dc8badc87",
+    "src/main/scala/v3/ifu/fetch-target-queue.scala": "19c81014724c8722124a049f52b163404380577f3bdd8ae43e680835fff663c5"
+  },
+  "bindings": [
+    {
+      "monitor": "monitors/freelist.scala",
+      "source": "src/main/scala/v3/exu/rename/rename-freelist.scala",
+      "class": "RenameFreeList"
+    },
+    {
+      "monitor": "monitors/maptable.scala",
+      "source": "src/main/scala/v3/exu/rename/rename-maptable.scala",
+      "class": "RenameMapTable"
+    },
+    {
+      "monitor": "monitors/busytable.scala",
+      "source": "src/main/scala/v3/exu/rename/rename-busytable.scala",
+      "class": "RenameBusyTable"
+    },
+    {
+      "monitor": "monitors/issue.scala",
+      "source": "src/main/scala/v3/exu/issue-units/issue-slot.scala",
+      "class": "IssueSlot"
+    },
+    {
+      "monitor": "monitors/rob.scala",
+      "source": "src/main/scala/v3/exu/rob.scala",
+      "class": "Rob"
+    },
+    {
+      "monitor": "monitors/lsu.scala",
+      "source": "src/main/scala/v3/lsu/lsu.scala",
+      "class": "LSU"
+    },
+    {
+      "monitor": "monitors/forwarding.scala",
+      "source": "src/main/scala/v3/lsu/lsu.scala",
+      "class": "ForwardingAgeLogic"
+    },
+    {
+      "monitor": "monitors/tlb.scala",
+      "source": "src/main/scala/v3/lsu/tlb.scala",
+      "class": "NBDTLB"
+    },
+    {
+      "monitor": "monitors/dcache.scala",
+      "source": "src/main/scala/v3/lsu/dcache.scala",
+      "class": "BoomNonBlockingDCacheModule"
+    },
+    {
+      "monitor": "monitors/frontend.scala",
+      "source": "src/main/scala/v3/ifu/frontend.scala",
+      "class": "BoomFrontendModule"
+    },
+    {
+      "monitor": "monitors/ftq.scala",
+      "source": "src/main/scala/v3/ifu/fetch-target-queue.scala",
+      "class": "FetchTargetQueue"
+    }
+  ]
+}

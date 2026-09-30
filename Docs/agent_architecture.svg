@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620">
+  <rect width="100%" height="100%" fill="#fbfbfd"/>
+  <text x="490" y="28" text-anchor="middle" font-size="16" fill="#111">Agent architecture  -  leftover split, Enh 2 / Enh 3, CHIA nodes</text>
+  <text x="490" y="48" text-anchor="middle" font-size="11" fill="#555">CHIA loop driver - chia_remote / get() onto named slots - planner never sees easy / hard / impossible</text>
+
+  <rect x="24" y="64" width="932" height="72" rx="8" fill="#fff" stroke="#94a3b8"/>
+  <text x="40" y="88" font-size="13" font-weight="600" fill="#111">CHIA loop (driver)  -  experiments/coverage_growth/cluster_driver.py - adapters/mediumboom/loop.py</text>
+  <text x="40" y="110" font-size="12" fill="#333">while budget: snapshot - leftover split - enhancement_plan - chia_remote(engine) - get() - merge - EngineYieldNode.record</text>
+  <text x="40" y="126" font-size="11" fill="#64748b">cluster.yaml: torture - riscv_dv+verilator_run - formal - coverage_meter   -   chia up / chia job submit / chia viz-profile</text>
+
+  <rect x="24" y="152" width="300" height="120" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text x="40" y="176" font-size="13" font-weight="600" fill="#1d4ed8">CoverageMeterNode</text>
+  <text x="40" y="196" font-size="11" fill="#333">@ChiaFunction coverage_meter: 1</text>
+  <text x="40" y="214" font-size="11" fill="#333">chia_meter_snapshot - chia_meter_merge</text>
+  <text x="40" y="232" font-size="11" fill="#333">frozen HMAC list - open names only</text>
+  <text x="40" y="250" font-size="11" fill="#64748b">kind = line | toggle | sva</text>
+
+  <rect x="340" y="152" width="300" height="120" rx="8" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="356" y="176" font-size="13" font-weight="600" fill="#6d28d9">split_leftovers (kind only)</text>
+  <text x="356" y="196" font-size="11" fill="#333">SVA leftovers - formal set</text>
+  <text x="356" y="214" font-size="11" fill="#333">line/toggle leftovers - CRV set</text>
+  <text x="356" y="232" font-size="11" fill="#333">crv_closed_frac on reachable denom</text>
+  <text x="356" y="250" font-size="11" fill="#64748b">no bucket tags to the planner</text>
+
+  <rect x="656" y="152" width="300" height="120" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+  <text x="672" y="176" font-size="13" font-weight="600" fill="#c2410c">enhancement_plan</text>
+  <text x="672" y="196" font-size="11" fill="#333">enh_formal - enh_directed - enh_v1</text>
+  <text x="672" y="214" font-size="11" fill="#333">after 40% hit + CRV batches e 8</text>
+  <text x="672" y="232" font-size="11" fill="#333">one Allocation (action, hours, pids)</text>
+  <text x="672" y="250" font-size="11" fill="#64748b">EngineYieldNode last_cph / stall</text>
+
+  <rect x="24" y="292" width="456" height="200" rx="8" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="40" y="316" font-size="13" font-weight="600" fill="#6d28d9">Enh 2  -  impossible prune</text>
+  <text x="40" y="336" font-size="12" fill="#333">formal_targets(split) - leftover SVA pids only</text>
+  <text x="40" y="356" font-size="12" fill="#333">chia_run_formal.chia_remote  -  get()</text>
+  <text x="40" y="376" font-size="12" fill="#333">slot formal: 1.0  -  SymbiYosysNode.run</text>
+  <text x="40" y="400" font-size="12" fill="#333">Cover BMC Unreached - retire (impossible)</text>
+  <text x="40" y="420" font-size="12" fill="#333">Cover BMC Reached - hit</text>
+  <text x="40" y="440" font-size="12" fill="#333">Meter accepts retire iff unreachable</text>
+  <text x="40" y="464" font-size="11" fill="#64748b">Sim engines cannot retire. Cap 3 batches, stop if dry.</text>
+
+  <rect x="500" y="292" width="456" height="200" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+  <text x="516" y="316" font-size="13" font-weight="600" fill="#c2410c">Enh 3  -  hard-to-hit last-mile</text>
+  <text x="516" y="336" font-size="12" fill="#333">directed_targets(split) - never SVA</text>
+  <text x="516" y="356" font-size="12" fill="#333">chia_run_directed.chia_remote  -  get()</text>
+  <text x="516" y="376" font-size="12" fill="#333">slot verilator_run: 1.0</text>
+  <text x="516" y="400" font-size="12" fill="#333">Named leftover line/toggle bins</text>
+  <text x="516" y="420" font-size="12" fill="#333">Hits possible - cannot retire ghosts</text>
+  <text x="516" y="440" font-size="12" fill="#333">Optional last-mile writer (self / Poolside)</text>
+  <text x="516" y="464" font-size="11" fill="#64748b">Never last-mile before 40% hit. CRV stall / peak-cph drop.</text>
+
+  <rect x="24" y="508" width="932" height="92" rx="8" fill="#fff" stroke="#94a3b8"/>
+  <text x="40" y="532" font-size="13" font-weight="600" fill="#111">Engine slots (cluster.yaml)  -  one chia_remote per round</text>
+  <text x="40" y="554" font-size="12" fill="#333">torture:1 - riscv_dv+verilator_run:1 (CRV carpet) - torture:0.25 (retune, unused on leftover poster) - verilator_run:1 (Enh 3) - formal:1 (Enh 2 / SymbiYosysNode)</text>
+  <text x="40" y="576" font-size="12" fill="#333">Merge hits/retired on CoverageMeterNode. Update EngineYieldNode. Next hour follows last-batch coverage-per-hour  -  not a chat planner.</text>
+</svg>

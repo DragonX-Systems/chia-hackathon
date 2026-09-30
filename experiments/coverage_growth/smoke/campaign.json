@@ -1,0 +1,14 @@
+{
+  "campaign_id": "mediumboom-flow-smoke-12-jobs",
+  "artifact_version": "flow-smoke-no-rtl",
+  "assumption_version": "flow-smoke-no-formal-assumptions",
+  "target_closure": 1.0,
+  "budget_compute_hours": 0.05,
+  "resources": {
+    "compute": 5
+  },
+  "recent_window": 10,
+  "n1": 5,
+  "n2": 1,
+  "n3": 1
+}

@@ -1,0 +1,23 @@
+# MediumBOOM adapter decoder cover task
+[tasks]
+cover
+prove
+
+[options]
+cover: mode cover
+cover: depth 4
+prove: mode prove
+prove: depth 4
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -I third_party/ultraembedded-riscv/core/riscv decoder_cover.sv
+read -formal -I third_party/ultraembedded-riscv/core/riscv third_party/ultraembedded-riscv/core/riscv/riscv_decoder.v
+prep -top decoder_cover
+
+[files]
+decoder_cover.sv
+third_party/ultraembedded-riscv/core/riscv/riscv_decoder.v
+third_party/ultraembedded-riscv/core/riscv/riscv_defs.v

@@ -1,0 +1,159 @@
+\documentclass[conference,letterpaper]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\title{Compute-Hour Efficient Coverage Growth:\\
+Baselines, Adaptive CHIA, and Parallel Resources}
+
+\author{\IEEEauthorblockN{Khushal Sethi and Kapil Bansal}
+\IEEEauthorblockA{CHIA Hackathon at A$^3$@MICRO 2026\\
+Artifact: \url{https://github.com/kbansal1512/chia-hackathon}}}
+
+\maketitle
+
+\begin{abstract}
+Verification campaigns share scarce compute across constrained-random
+verification (CRV), directed collateral, and formal analysis. We frame the
+hackathon artifact as a coverage-per-compute-hour comparison with three arms:
+(B1)~CRV only; (B2)~a fixed CRV$\rightarrow$directed$+$formal hybrid that uses
+the same engines as CHIA; and (B3)~a CHIA adaptive allocator on that same pool.
+A CHIA systems claim requires B3 to beat B2, not merely B1. A second feature
+targets scale: today's loop mostly occupies one resource class at a time;
+with $N$ heterogeneous seats, a large cover space, and a large formal
+partition, CHIA must admit and replan work under scarcity. We also ship a
+source-pinned BOOM monitor package with partial MediumBOOM qualification
+evidence. The monitors elaborate on generated MediumBoomV3Config RTL and pass
+five instrumented workloads. The aggregate reaches 73.59\% full-design signal
+toggle activity and 582 of 1,192 named cover counters. A DTLB cover witness
+replays, a targeted ROB mutation is caught, and the generated integer and FP
+RenameBusyTable assertion cones pass 2-inductive proofs. We do not claim CPU
+closure: per-instance audit is partial, one FP activation instance remains
+open, and a DTLB stale-refill counterexample needs owner review. Bounded cover
+non-hits do not retire coverage.
+\end{abstract}
+
+\begin{IEEEkeywords}
+CHIA, coverage per compute-hour, adaptive scheduling, formal scope, BOOM
+\end{IEEEkeywords}
+
+\section{Problem}
+
+CRV, directed tests, and formal solvers are often available together. The hard
+decision is which engine receives the next compute-hour---and, at scale, which
+of $N$ seats receives the next job---while preserving evidence that progress
+means what it appears to mean. Showing that formal reaches points simulation
+cannot establishes engine complementarity. It does not by itself establish that
+an adaptive control plane is better than a competent fixed hybrid schedule.
+
+\section{Feature 1: three baselines}
+
+We compare three arms. \textbf{B1 (CRV only)} is the diagnostic floor.
+\textbf{B2 (static hybrid)} runs a fixed CRV$\rightarrow$directed$\rightarrow$formal
+schedule, frozen before held-out outcomes, and uses the same engines as CHIA;
+it is the primary control. \textbf{B3 (CHIA adaptive)} uses the same resource
+pool but admits the next job from open debt and measured yield.
+
+Primary outcomes are sound coverage closed per compute-hour and wall time (or
+cost) to a pre-registered target. B3 must be compared to B2. Beating B1 alone
+is insufficient because B1 withholds engines known to be necessary for some
+obligations. The repository's MediumBOOM smoke run is pilot evidence of
+complementarity (simulation bins versus Load/Store Unit cover properties). It
+is not a published B1/B2/B3 ROI table.
+
+\section{Feature 2: one seat today, \texorpdfstring{$N$}{N} seats next}
+
+The present driver largely serializes engine classes: one batch of CRV,
+directed, or formal work at a time. The next claim is a large coverage space
+and a large formal partition under heterogeneous parallelism---many simulator
+slots, scarce formal licenses, and build/writer seats. CHIA's role is
+admission and replanning: keep high-yield simulation busy while the formal seat
+works the highest expected-closure batch, cancel stale jobs when debt closes,
+and reuse cached results keyed by immutable job identity. A timeout or missing
+monitor must remain an open obligation, not a silent demotion to a narrower
+scope under the same result label.
+
+\section{Evidence and scope discipline}
+
+Bounded cover non-hits do not retire coverage. Exclusion requires a separately
+reviewed proof of the exact obligation under matching scope and assumptions.
+\texttt{BOOM\_FORMAL\_SCOPE=lsu} is an explicit lower-scope experiment; optional
+timeout fallback requires \texttt{BOOM\_FORMAL\_ALLOW\_LSU\_FALLBACK=1} and
+cannot replace a ChipTop result. Historic 51-point hit/closure figures from the
+proxy meter are retained for inspectability and are not submission ROI.
+
+\section{BOOM collateral and qualification status}
+
+The package is pinned to BOOM revision
+\texttt{58ef2720eae13be26b3008c02b5a74ce29c61c44}. It contains 67 assertion
+families, 66 scenario families, and activation identities, with overlay
+staging and an explicit last-mile obligation list. For the pinned
+MediumBoomV3Config, Chisel elaboration and five assertion-enabled,
+coverage-instrumented DUT workloads completed: two directed programs, one
+\texttt{riscv-dv} program, and two scalar-FP torture programs. The merged full-design
+signal-toggle rate is 73.59\%; a filtered 15-module monitor subset reaches
+77.96\%. These are activity metrics, not semantic property coverage. There
+are 582 hits among 1,192 named cover counters, including 49/67 activation
+families and 24/66 scenario families. The FP BusyTable activation reaches
+63/64 instances for each family; the preg-0 instance remains unhit and is not
+retired.
+
+Local DTLB cover reached all nine lowered cover goals and the late-refill
+witness replayed. A one-expression ROB rollback mutant triggered its intended
+checker on the same directed workload that passes on baseline. Both generated
+integer and FP RenameBusyTable assertion cones pass Yosys 2-inductive proofs.
+These are partial, targeted results, not whole-processor qualification.
+
+\begin{itemize}
+\raggedright
+\item \textbf{Elaboration and simulation:} MediumBoomV3Config elaborated; five
+  workloads passed. Merged signal-toggle coverage is 73.59\% full-design and
+  77.96\% for the filtered 15-module monitor subset. These are activity
+  measurements, not property coverage. The aggregate hits 582/1,192 named
+  cover counters (49/67 activation families; 24/66 scenario families).
+\item \textbf{DTLB witness:} all nine lowered cover goals were reached, and
+  the late-refill witness replays. A depth-5 BMC counterexample to
+  \texttt{no\_stale\_refill\_after\_fence} also replays and needs owner review.
+\item \textbf{ROB mutation:} one internal rollback mutant triggers the
+  unchanged \texttt{rob.rollback\_no\_commit} checker; the same workload passes
+  on baseline.
+\item \textbf{Formal limits:} a depth-2 BoomFrontend assertion BMC and depth-6
+  BusyTable BMCs pass. Both generated BusyTable assertion cones also pass
+  2-inductive proofs, but no whole-core or DTLB induction proof has run.
+  Per-instance checker qualification remains incomplete; the DTLB stale-refill
+  counterexample needs BOOM-owner protocol review.
+\item \textbf{Campaign limits:} the paired B1/B2/B3 compute-hour campaign on
+  $N$ workers has not run.
+\end{itemize}
+
+\section{Reproduction}
+
+The exact targeted Python regression command is in the repository's
+\texttt{QUALIFICATION.md}; the Yosys BusyTable proof commands and logs are in
+\texttt{formal\_busytable/README.md}. The test suite exercises package and
+dispatch plumbing, not the N-worker campaign. The full adaptive-versus-static
+protocol, including cold/warm scenarios and mechanism ablations, is specified
+in the companion whitepaper in the artifact. BOOM qualification logs, hashes,
+replay traces, and reproduction instructions are in
+\texttt{artifacts\_mediumboom/kapil\_qualification/}.
+
+\section{Conclusion}
+
+We restate the hackathon contribution as (1)~a fair three-arm
+coverage-per-compute-hour design in which CHIA must beat a fixed hybrid that
+already has formal, and (2)~a path from single-seat serial placement to
+parallel multi-resource CHIA on large cover and formal work. The BOOM monitor
+package is submitted as reviewable next-phase collateral under an explicit
+qualification boundary.
+
+\section*{AI assistance}
+Drafting and copy-editing used coding assistants. The authors are responsible
+for the claims and evidence boundaries in this paper.
+
+\end{document}

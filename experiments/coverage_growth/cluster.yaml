@@ -1,0 +1,91 @@
+# Cluster for the legacy MediumBOOM coverage-growth experiment.
+#
+# Five long-lived worker types. Tools live in the images — chia up pulls once.
+# The loop asks for slots: torture / riscv_dv / verilator_run / formal /
+# artifact_writer / coverage_meter.
+#
+#   export THIS_MACHINE=$(hostname)
+#   conda activate chia_env
+#   chia up experiments/coverage_growth/cluster.yaml
+#   chia job submit -- python experiments/coverage_growth/cluster_driver.py
+#   chia down experiments/coverage_growth/cluster.yaml
+#
+# On a laptop with no Docker workers, skip chia up and run the loop directly;
+# it starts a local Ray and advertises the same resource names.
+
+cluster_name: coverage-growth
+
+provider:
+    head_ip: ${THIS_MACHINE}
+
+auth:
+    ssh_user: ${USER}
+    # ssh_private_key: ~/.ssh/<ssh_key_name>
+
+available_node_types:
+
+    # Cheap random (riscv-tests / torture). Many slots: carpet-bomb in parallel.
+    torture:
+        resources: {"torture": 8}
+        num_workers: 1
+        compatible_ips: ["${THIS_MACHINE}"]
+        docker:
+            image: "ghcr.io/ucb-bar/chia-verilator-run:latest"
+            container_name: "cov-torture-${USER}"
+            pull_before_run: True
+            run_options:
+                - --ulimit nofile=65536:65536
+                - --shm-size=10.24gb
+
+    # Constrained-random (riscv-dv) + the Verilator run that scores coverage.
+    # 1.0 in @ChiaFunction(resources={"verilator_run": 1.0}) takes one of these 10.
+    verilator_run:
+        resources: {"verilator_run": 10, "riscv_dv": 10}
+        min_workers: 1
+        max_workers: 1
+        docker:
+            image: "ghcr.io/ucb-bar/chia-verilator-run:latest"
+            container_name: "cov-verilator-${USER}"
+            pull_before_run: True
+            run_options:
+                - --ulimit nofile=65536:65536
+                - --shm-size=10.24gb
+        compatible_ips: ["${THIS_MACHINE}"]
+
+    # LLM / self last-mile assembly writer (verification collateral construction).
+    # Directed places this before verilator_run. Needs network for Astra/Poolside.
+    artifact_writer:
+        resources: {"artifact_writer": 4}
+        num_workers: 1
+        compatible_ips: ["${THIS_MACHINE}"]
+        worker_env_commands: ["source ~/.bashrc && conda activate chia_env"]
+        # Optional: pass ASTRA_API_KEY / POOLSIDE_API_KEY via the head env.
+
+    # SymbiYosys / Yosys. Separate image so formal does not steal Verilator slots.
+    formal:
+        resources: {"formal": 4}
+        num_workers: 1
+        compatible_ips: ["${THIS_MACHINE}"]
+        docker:
+            image: "ghcr.io/ucb-bar/chia:latest"
+            container_name: "cov-formal-${USER}"
+            pull_before_run: True
+            run_options:
+                - --shm-size=4g
+
+    # Frozen coverage meter — isolated worker. Planner may query, not write the model.
+    coverage_meter:
+        resources: {"coverage_meter": 1}
+        num_workers: 1
+        compatible_ips: ["${THIS_MACHINE}"]
+        worker_env_commands: ["source ~/.bashrc && conda activate chia_env"]
+
+head_env_commands: ["source ~/.bashrc && conda activate chia_env"]
+
+head_start_ray_commands:
+    - ray stop
+    - ulimit -c unlimited && ray start --head --port=6379 --include-dashboard=True --dashboard-agent-listen-port=0 --temp-dir=/tmp/ray/${USER}
+
+worker_start_ray_commands:
+    - ray stop
+    - ray start --address=$RAY_HEAD_IP:6379 --dashboard-agent-listen-port=0

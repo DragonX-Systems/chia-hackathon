@@ -1,0 +1,41 @@
+--- a/SimTSI.cc
++++ b/SimTSI.cc
+@@ -1,10 +1,13 @@
+ #include <vpi_user.h>
+ #include <svdpi.h>
+ #include <map>
++#include <mutex>
+ #include <string>
+ #include "testchip_tsi.h"
+ 
+ std::map<int, testchip_tsi_t*> tsis;
++static std::mutex tsi_mu;
+ 
+ // Remove VCS simv option from argv if it match pattern -X???=
+ void remove_vcs_simv_opt(int & argc, char **& argv){
+@@ -37,8 +40,14 @@
+     bool out_fire = *out_ready && out_valid;
+     bool in_fire = *in_valid && in_ready;
+     bool in_free = !(*in_valid);
++    (void)out_fire;
++    (void)in_fire;
++    (void)in_free;
++
++    // Serialize DPI against Verilator --threads: map init + queue front are not re-entrant.
++    std::lock_guard<std::mutex> lock(tsi_mu);
+ 
+     auto it = tsis.find(chip_id);
+ 
+     if (it == tsis.end()) {
+@@ -56,8 +65,10 @@
+     tsi->tick(out_valid, out_bits, in_ready);
+     tsi->switch_to_host();
+ 
+     *in_valid = tsi->in_valid();
+-    *in_bits = tsi->in_bits();
++    // Never call in_bits()/front() on an empty host queue (UB → SIGSEGV on libc++).
++    *in_bits = (*in_valid) ? static_cast<int>(tsi->in_bits()) : 0;
+     *out_ready = tsi->out_ready();
+ 
+     return tsi->done() ? (tsi->exit_code() << 1 | 1) : 0;
+ }

@@ -1,0 +1,9 @@
+{
+  "points": [
+    {"point_id": "commit.smoke", "partition_id": "commit"},
+    {"point_id": "decode.smoke", "partition_id": "decode"},
+    {"point_id": "execute.smoke", "partition_id": "execute"},
+    {"point_id": "frontend.smoke", "partition_id": "frontend"},
+    {"point_id": "lsu.smoke", "partition_id": "lsu"}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "scope": "local_decoder_only",
+  "ibex_commit": "e9f55342edbd27e9e17a0e41b1c95a81abb5eac8",
+  "predicate_file": "coverage/decoder_events.sv",
+  "sample": "valid && !illegal",
+  "core_probe_qualified": false,
+  "bins": [
+    {"id": "decode.memory", "bit": 0},
+    {"id": "decode.multiply", "bit": 1},
+    {"id": "decode.divide", "bit": 2},
+    {"id": "decode.branch", "bit": 3},
+    {"id": "decode.jump", "bit": 4},
+    {"id": "decode.memory_multiply", "bit": 5},
+    {"id": "decode.memory_divide", "bit": 6},
+    {"id": "decode.memory_branch", "bit": 7},
+    {"id": "decode.memory_jump", "bit": 8},
+    {"id": "decode.multiply_divide", "bit": 9},
+    {"id": "decode.multiply_branch", "bit": 10},
+    {"id": "decode.multiply_jump", "bit": 11},
+    {"id": "decode.divide_branch", "bit": 12},
+    {"id": "decode.divide_jump", "bit": 13},
+    {"id": "decode.branch_jump", "bit": 14}
+  ]
+}

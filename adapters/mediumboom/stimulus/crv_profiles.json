@@ -1,0 +1,60 @@
+{
+  "crv-1": {
+    "name": "Integer and control flow",
+    "overrides": {
+      "amo": "false",
+      "mul": "false",
+      "divider": "false",
+      "profile.muldiv_only": "false",
+      "profile.atomic_percent": "0",
+      "profile.fence_percent": "0",
+      "profile.privilege_tests": "0"
+    },
+    "config": "crv_profiles/integer_control.config"
+  },
+  "crv-2": {
+    "name": "Load/store and memory ordering",
+    "overrides": {
+      "mul": "false",
+      "divider": "false",
+      "profile.muldiv_only": "false",
+      "profile.atomic_percent": "10",
+      "profile.fence_percent": "20",
+      "profile.privilege_tests": "0"
+    },
+    "config": "crv_profiles/load_store_ordering.config"
+  },
+  "crv-3": {
+    "name": "Multiply, divide, and atomics",
+    "overrides": {
+      "profile.muldiv_only": "true",
+      "profile.atomic_percent": "85",
+      "profile.fence_percent": "5",
+      "profile.privilege_tests": "0"
+    },
+    "config": "crv_profiles/mul_div_atomic.config"
+  },
+  "crv-4": {
+    "name": "Privilege and exception behavior",
+    "overrides": {
+      "amo": "false",
+      "mul": "false",
+      "divider": "false",
+      "profile.muldiv_only": "false",
+      "profile.atomic_percent": "0",
+      "profile.fence_percent": "10",
+      "profile.privilege_tests": "64"
+    },
+    "config": "crv_profiles/privilege_exception.config"
+  },
+  "crv-5": {
+    "name": "Mixed long-running system behavior",
+    "overrides": {
+      "profile.muldiv_only": "false",
+      "profile.atomic_percent": "25",
+      "profile.fence_percent": "10",
+      "profile.privilege_tests": "16"
+    },
+    "config": "crv_profiles/mixed_long_running.config"
+  }
+}

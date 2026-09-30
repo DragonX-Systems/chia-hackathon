@@ -1,0 +1,23 @@
+# MediumBOOM adapter IRQ cover task
+[tasks]
+cover
+prove
+
+[options]
+cover: mode cover
+cover: depth 16
+prove: mode prove
+prove: depth 16
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -I third_party/riscv_soc/soc irq_cover.sv
+read -formal -I third_party/riscv_soc/soc third_party/riscv_soc/soc/irq_ctrl.v
+prep -top irq_cover
+
+[files]
+irq_cover.sv
+third_party/riscv_soc/soc/irq_ctrl.v
+third_party/riscv_soc/soc/irq_ctrl_defs.v

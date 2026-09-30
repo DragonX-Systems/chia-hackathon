@@ -1,0 +1,19 @@
+[tasks]
+cover
+prove
+
+[options]
+cover: mode cover
+cover: depth 16
+prove: mode prove
+prove: depth 16
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal cover_lsu.sv
+prep -top cover_lsu
+
+[files]
+cover_lsu.sv
